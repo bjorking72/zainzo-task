@@ -1,0 +1,57 @@
+/* Kanban Board Styles */
+.boardContainer {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.boardHeader {
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  margin-bottom: 24px;
+}
+
+.boardContent {
+  flex: 1;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.02);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.columnsContainer {
+  display: flex;
+  gap: 16px;
+  height: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 8px;
+}
+
+.columnsContainer::-webkit-scrollbar {
+  height: 12px;
+}
+
+.columnsContainer::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+}
+
+.columnsContainer::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+}
+
+.columnsContainer::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+@media (max-width: 768px) {
+  .boardContent {
+    padding: 12px;
+  }
+  
+  .columnsContainer {
+    gap: 12px;
+  }
+}
