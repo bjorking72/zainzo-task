@@ -13,7 +13,7 @@ const firebaseConfig = {
   messagingSenderId: '1074217729888',
   appId: '1:1074217729888:web:e8e8da14b38765c1de2805',
   measurementId: 'G-ECCBS2NC6V',
-  databaseURL: 'https://grafistix777-default-rtdb.firebaseio.com/',
+  databaseURL: 'https://grafistix777-default-rtdb.asia-southeast1.firebasedatabase.app/',
 };
 
 if (!firebase.apps.length) {

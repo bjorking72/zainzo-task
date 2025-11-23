@@ -45,8 +45,27 @@ export const AuthProvider = ({ children }: { children: React.ReactElement }) => 
     () =>
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      firebase.auth().onAuthStateChanged((user) => {
+      firebase.auth().onAuthStateChanged(async (user) => {
         if (user) {
+          // Save user to database if not exists
+          try {
+            const userRef = firebase.database().ref(`users/${user.uid}`);
+            const snapshot = await userRef.once('value');
+            
+            if (!snapshot.exists()) {
+              // Create user in database
+              await userRef.set({
+                username: user.displayName || user.email?.split('@')[0] || 'User',
+                email: user.email,
+                avatar: user.photoURL,
+                createdAt: new Date().toISOString(),
+              });
+              console.log('User data saved to database:', user.uid);
+            }
+          } catch (error) {
+            console.error('Error saving user to database:', error);
+          }
+
           // Here you should extract the complete user profile to make it available in your entire app.
           // The auth state only provides basic information.
           dispatch({
@@ -57,6 +76,7 @@ export const AuthProvider = ({ children }: { children: React.ReactElement }) => 
                 id: user.uid,
                 avatar: user.photoURL,
                 email: user.email,
+                displayName: user.displayName,
               },
             },
           });
@@ -95,8 +115,18 @@ export const AuthProvider = ({ children }: { children: React.ReactElement }) => 
   };
 
   // Sign Up
-  const signup = (email: string, password: string) =>
-    firebase.auth().createUserWithEmailAndPassword(email, password);
+  const signup = async (email: string, password: string) => {
+    const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
+    if (userCredential.user) {
+      // Save user to database
+      await firebase.database().ref(`users/${userCredential.user.uid}`).set({
+        username: email.split('@')[0],
+        email: email,
+        createdAt: new Date().toISOString(),
+      });
+    }
+    return userCredential;
+  };
 
   // Sign In
   const signin = (email: string, password: string) =>
